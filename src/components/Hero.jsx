@@ -221,7 +221,7 @@
 // };
 
 // export default HeroZoomOut;
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const HeroZoomIn = () => {
   const [progress, setProgress] = useState(0);
@@ -246,7 +246,6 @@ const HeroZoomIn = () => {
   }, []);
 
   const scale = 0.6 + 0.4 * progress;
-
   const showImage = progress < 0.98;
   const showText = progress >= 0.98;
 
@@ -254,23 +253,25 @@ const HeroZoomIn = () => {
     <div className="w-full bg-white">
       <div className="h-[200vh] relative">
         <div className="sticky top-0 h-screen w-full z-10 flex items-center justify-center overflow-hidden">
-          {/* Zooming Image */}
+          {/* Image Container */}
           {showImage && (
             <div
               className="absolute inset-0 will-change-transform"
               style={{
-                transform: `scale(${scale})`,
+                transform: `scale(${scale}) translateZ(0)`,
+                transformOrigin: "center center",
                 zIndex: 1,
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+                perspective: "1000px",
               }}
             >
-              {/* Mobile Image */}
               <img
                 src="/images/AA3D_Vertical.png"
                 alt="Hero Vertical"
                 className="block md:hidden w-full h-full object-cover"
                 draggable={false}
               />
-              {/* Desktop Image */}
               <img
                 src="/images/AA1kg.png"
                 alt="Hero Horizontal"
@@ -280,7 +281,7 @@ const HeroZoomIn = () => {
             </div>
           )}
 
-          {/* Text content appears instantly after image ends */}
+          {/* Text */}
           {showText && (
             <div className="absolute inset-0 flex items-center justify-center px-4 md:px-8 text-center z-10">
               <p className="text-[32px] md:text-[55px] font-semibold text-black leading-tight">
@@ -306,5 +307,6 @@ const HeroZoomIn = () => {
 };
 
 export default HeroZoomIn;
+
 
 
