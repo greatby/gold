@@ -221,20 +221,27 @@
 // };
 
 // export default HeroZoomOut;
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const HeroZoomIn = () => {
-  const [progress, setProgress] = useState(0); // 0 to 1
+  const [progress, setProgress] = useState(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const maxScroll = window.innerHeight;
-      const p = Math.min(scrollY / maxScroll, 1);
-      setProgress(p);
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const maxScroll = window.innerHeight;
+          const p = Math.min(scrollY / maxScroll, 1);
+          setProgress(p);
+          ticking.current = false;
+        });
+        ticking.current = true;
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -244,13 +251,11 @@ const HeroZoomIn = () => {
 
   return (
     <div className="w-full bg-white">
-      {/* Create 200vh scroll space */}
       <div className="h-[200vh] relative">
-        {/* Sticky container with image + text switching */}
-        <div className="sticky top-0 h-screen w-full z-10 flex items-center justify-center">
-          {/* Image zooms in and fades out */}
+        <div className="sticky top-0 h-screen w-full z-10 flex items-center justify-center overflow-hidden">
+          {/* Zoom Image */}
           <div
-            className="absolute inset-0 transition-all duration-300 ease-out"
+            className="absolute inset-0 will-change-transform transition-transform duration-75 ease-out"
             style={{
               transform: `scale(${scale})`,
               opacity: imageOpacity,
@@ -262,18 +267,20 @@ const HeroZoomIn = () => {
               src="/images/AA3D_Vertical.png"
               alt="Hero Vertical"
               className="block md:hidden w-full h-full object-cover"
+              draggable={false}
             />
             {/* Desktop Image */}
             <img
               src="/images/AA1kg.png"
               alt="Hero Horizontal"
               className="hidden md:block w-full h-full object-cover"
+              draggable={false}
             />
           </div>
 
-          {/* Text content fades in after image disappears */}
+          {/* Text Content */}
           <div
-            className="absolute inset-0 flex items-center justify-center px-4 md:px-8 text-center transition-opacity duration-500 ease-in"
+            className="absolute inset-0 flex items-center justify-center px-4 md:px-8 text-center transition-opacity duration-500 ease-in will-change-opacity"
             style={{
               opacity: textOpacity,
               zIndex: 2,
@@ -302,3 +309,4 @@ const HeroZoomIn = () => {
 };
 
 export default HeroZoomIn;
+
