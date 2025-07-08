@@ -246,62 +246,59 @@ const HeroZoomIn = () => {
   }, []);
 
   const scale = 0.6 + 0.4 * progress;
-  const imageOpacity = 1 - progress;
-  const textOpacity = progress >= 0.98 ? 1 : 0;
+
+  const showImage = progress < 0.98;
+  const showText = progress >= 0.98;
 
   return (
     <div className="w-full bg-white">
       <div className="h-[200vh] relative">
         <div className="sticky top-0 h-screen w-full z-10 flex items-center justify-center overflow-hidden">
-          {/* Zoom Image */}
-          <div
-            className="absolute inset-0 will-change-transform transition-transform duration-75 ease-out"
-            style={{
-              transform: `scale(${scale})`,
-              opacity: imageOpacity,
-              zIndex: 1,
-            }}
-          >
-            {/* Mobile Image */}
-            <img
-              src="/images/AA3D_Vertical.png"
-              alt="Hero Vertical"
-              className="block md:hidden w-full h-full object-cover"
-              draggable={false}
-            />
-            {/* Desktop Image */}
-            <img
-              src="/images/AA1kg.png"
-              alt="Hero Horizontal"
-              className="hidden md:block w-full h-full object-cover"
-              draggable={false}
-            />
-          </div>
+          {/* Zooming Image */}
+          {showImage && (
+            <div
+              className="absolute inset-0 will-change-transform"
+              style={{
+                transform: `scale(${scale})`,
+                zIndex: 1,
+              }}
+            >
+              {/* Mobile Image */}
+              <img
+                src="/images/AA3D_Vertical.png"
+                alt="Hero Vertical"
+                className="block md:hidden w-full h-full object-cover"
+                draggable={false}
+              />
+              {/* Desktop Image */}
+              <img
+                src="/images/AA1kg.png"
+                alt="Hero Horizontal"
+                className="hidden md:block w-full h-full object-cover"
+                draggable={false}
+              />
+            </div>
+          )}
 
-          {/* Text Content */}
-          <div
-            className="absolute inset-0 flex items-center justify-center px-4 md:px-8 text-center transition-opacity duration-500 ease-in will-change-opacity"
-            style={{
-              opacity: textOpacity,
-              zIndex: 2,
-              pointerEvents: textOpacity ? "auto" : "none",
-            }}
-          >
-            <p className="text-[32px] md:text-[55px] font-semibold text-black leading-tight">
-              The Easiest Way to Buy & Sell{" "}
-              <span className="text-[#ffd700]">Gold</span> and{" "}
-              <span className="text-[#c0c0c0]">Silver</span> in India. <br />
-              Your trusted gateway to real{" "}
-              <span className="text-[#ffd700]">gold</span> and{" "}
-              <span className="text-[#c0c0c0]">silver</span> bars — now just a
-              tap away. <br />
-              Buy and sell with confidence, 24/7. No hassle. No delays. Just
-              pure metal. <br />
-              The Platform Investors Have Been Waiting For. Smart. Secure.
-              Serious. <br />
-              <span className="italic text-gray-600">Coming Soon</span>
-            </p>
-          </div>
+          {/* Text content appears instantly after image ends */}
+          {showText && (
+            <div className="absolute inset-0 flex items-center justify-center px-4 md:px-8 text-center z-10">
+              <p className="text-[32px] md:text-[55px] font-semibold text-black leading-tight">
+                The Easiest Way to Buy & Sell{" "}
+                <span className="text-[#ffd700]">Gold</span> and{" "}
+                <span className="text-[#c0c0c0]">Silver</span> in India. <br />
+                Your trusted gateway to real{" "}
+                <span className="text-[#ffd700]">gold</span> and{" "}
+                <span className="text-[#c0c0c0]">silver</span> bars — now just a
+                tap away. <br />
+                Buy and sell with confidence, 24/7. No hassle. No delays. Just
+                pure metal. <br />
+                The Platform Investors Have Been Waiting For. Smart. Secure.
+                Serious. <br />
+                <span className="italic text-gray-600">Coming Soon</span>
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -309,4 +306,5 @@ const HeroZoomIn = () => {
 };
 
 export default HeroZoomIn;
+
 
