@@ -16,28 +16,29 @@ const HeroZoomOut = () => {
   }, []);
 
   const scale = 1 - 0.4 * progress;
-  const opacity = 1 - progress;
+  const imageOpacity = 1 - progress;
+ const textOpacity = progress >= 0.98 ? 1 : 0;
+
 
   return (
     <div className="w-full bg-white">
-      {/* Hero Image Section */}
+      {/* Hero Section */}
       <div className="relative h-screen w-full overflow-hidden">
         <div className="sticky top-0 h-screen w-full z-10">
           <div
-            className="absolute inset-0 w-full h-full transition-all duration-100 ease-out"
+            className="absolute inset-0 w-full h-full transition-all duration-200 ease-out"
             style={{
               transform: `scale(${scale})`,
-              opacity,
+              opacity: imageOpacity,
             }}
           >
-            {/* Mobile (Vertical Image) */}
+            {/* Mobile Image */}
             <img
               src="/images/AA3D_Vertical.png"
               alt="Hero Vertical"
-              className="block md:hidden w-full h-full object-contain"
+              className="block md:hidden w-full h-full object-cover"
             />
-
-            {/* Tablet+ (Horizontal Image) */}
+            {/* Desktop Image */}
             <img
               src="/images/AA1kg.png"
               alt="Hero Horizontal"
@@ -47,8 +48,14 @@ const HeroZoomOut = () => {
         </div>
       </div>
 
-      {/* Next content section (not sticky!) */}
-      <div className="relative z-0 px-4 md:px-8 py-20 max-w-4xl mx-auto text-center">
+      {/* Text content appears only after image fully fades out */}
+      <div
+        className="relative z-0 px-4 md:px-8 py-20 max-w-4xl mx-auto text-center transition-opacity duration-700"
+        style={{
+          opacity: textOpacity,
+          pointerEvents: textOpacity ? "auto" : "none",
+        }}
+      >
         <p className="text-[32px] md:text-[55px] font-semibold text-black leading-tight">
           The Easiest Way to Buy & Sell{" "}
           <span className="text-[#ffd700]">Gold</span> and{" "}
